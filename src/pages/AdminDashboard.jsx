@@ -11,7 +11,7 @@ export default function AdminDashboard() {
     <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
       <aside className="w-64 bg-gray-900 text-white flex flex-col p-4">
-        <h1 className="text-2xl font-bold mb-8 text-center">Admin Panel</h1>
+        <h1 className="text-2xl font-bold mb-8 mt-20 text-center">Admin Panel</h1>
         <nav className="space-y-3">
           <button
             onClick={() => setActiveTab("dashboard")}

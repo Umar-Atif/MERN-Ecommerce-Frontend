@@ -48,7 +48,6 @@ export default function AdminProducts() {
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
                 });
-
                 toast.success("Product updated successfully!");
             } else {
                 await api.post("/products", formData, {
@@ -57,8 +56,6 @@ export default function AdminProducts() {
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
                 });
-
-
                 toast.success("Product added successfully!");
             }
 
@@ -95,10 +92,15 @@ export default function AdminProducts() {
 
     return (
         <div className="pt-24 min-h-screen px-4 md:px-8 lg:px-16 bg-gray-50">
-            <h2 className="text-2xl font-bold text-indigo-700 mb-6">Product Management 📦</h2>
+            <h2 className="text-2xl font-bold text-indigo-700 mb-6 text-center md:text-left">
+                Product Management 📦
+            </h2>
 
-            <div className="bg-white shadow-md rounded-2xl p-6 mb-8">
-                <h3 className="text-lg font-semibold mb-4">{editingProductId ? "Edit Product" : "Add Product"}</h3>
+            {/* ===== FORM ===== */}
+            <div className="bg-white shadow-md rounded-2xl p-6 mb-8 max-w-3xl mx-auto">
+                <h3 className="text-lg font-semibold mb-4">
+                    {editingProductId ? "Edit Product" : "Add Product"}
+                </h3>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <input
                         type="text"
@@ -113,6 +115,7 @@ export default function AdminProducts() {
                         value={form.description}
                         onChange={(e) => setForm({ ...form, description: e.target.value })}
                         className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+                        rows="3"
                         required
                     />
                     <input
@@ -135,52 +138,71 @@ export default function AdminProducts() {
                         type="file"
                         accept="image/*"
                         onChange={(e) => setForm({ ...form, image: e.target.files[0] })}
-                        className="w-full cursor-pointer"
-                        required
+                        className="w-full cursor-pointer border rounded-lg p-2"
+                        required={!editingProductId}
                     />
                     <button
                         type="submit"
-                        className="bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700 transition cursor-pointer"
+                        className="bg-indigo-600 text-white w-full py-2 rounded-full hover:bg-indigo-700 transition cursor-pointer font-medium"
                     >
                         {editingProductId ? "Update Product" : "Add Product"}
                     </button>
                 </form>
             </div>
 
-            <div className="bg-white shadow-md rounded-2xl p-6">
+            {/* ===== TABLE ===== */}
+            <div className="bg-white shadow-md rounded-2xl p-4 overflow-x-auto">
                 {loading ? (
-                    <p className="text-indigo-600 font-semibold">Loading products...</p>
+                    <p className="text-indigo-600 font-semibold text-center">Loading products...</p>
                 ) : products.length === 0 ? (
-                    <p className="text-gray-600">No products found.</p>
+                    <p className="text-gray-600 text-center">No products found.</p>
                 ) : (
-                    <table className="w-full table-auto">
+                    <table className="min-w-full text-sm">
                         <thead>
                             <tr className="text-left border-b border-gray-300">
                                 <th className="py-2 px-3">Image</th>
                                 <th className="py-2 px-3">Name</th>
-                                <th className="py-2 px-3">Id</th>
+                                <th className="py-2 px-3 hidden md:table-cell">ID</th>
                                 <th className="py-2 px-3">Description</th>
                                 <th className="py-2 px-3">Price</th>
                                 <th className="py-2 px-3">Category</th>
-                                <th className="py-2 px-3">Actions</th>
+                                <th className="py-2 px-3 text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {products.map((p) => (
-                                <tr key={p._id} className="border-b border-gray-200">
+                                <tr key={p._id} className="border-b border-gray-200 hover:bg-gray-50">
                                     <td className="py-2 px-3">
-                                        {p.image ? <img src={p.image} alt={p.name} className="w-16 h-16 object-cover rounded" /> : "No Image"}
+                                        {p.image ? (
+                                            <img
+                                                src={p.image}
+                                                alt={p.name}
+                                                className="w-16 h-16 object-cover rounded-md"
+                                            />
+                                        ) : (
+                                            "No Image"
+                                        )}
                                     </td>
-                                    <td className="py-2 px-3">{p.name}</td>
-                                    <td className="py-2 px-3">{p._id}</td>
-                                    <td className="py-2 px-3">{p.description}</td>
-                                    <td className="py-2 px-3">Rs. {p.price}</td>
+                                    <td className="py-2 px-3 font-medium">{p.name}</td>
+                                    <td className="py-2 px-3 hidden md:table-cell text-gray-500">
+                                        {p._id}
+                                    </td>
+                                    <td className="py-2 px-3 text-gray-600">
+                                        {p.description?.slice(0, 40)}...
+                                    </td>
+                                    <td className="py-2 px-3 font-semibold">Rs. {p.price}</td>
                                     <td className="py-2 px-3">{p.category || "-"}</td>
-                                    <td className="py-2 px-3 flex gap-2">
-                                        <button onClick={() => handleEdit(p)} className="text-blue-600 hover:underline flex items-center gap-1 cursor-pointer">
+                                    <td className="py-2 px-3 flex gap-3 justify-center">
+                                        <button
+                                            onClick={() => handleEdit(p)}
+                                            className="text-blue-600 hover:underline flex items-center gap-1 cursor-pointer"
+                                        >
                                             <Edit size={16} /> Edit
                                         </button>
-                                        <button onClick={() => handleDelete(p._id)} className="text-red-600 hover:underline flex items-center gap-1 cursor-pointer">
+                                        <button
+                                            onClick={() => handleDelete(p._id)}
+                                            className="text-red-600 hover:underline flex items-center gap-1 cursor-pointer"
+                                        >
                                             <Trash2 size={16} /> Delete
                                         </button>
                                     </td>

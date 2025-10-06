@@ -54,52 +54,43 @@ export default function AdminOrders() {
                 All Orders 🧾
             </h2>
 
-            <div className="overflow-x-auto bg-white shadow-md rounded-2xl">
-                <table className="min-w-full divide-y divide-gray-200">
+            <div className="overflow-x-auto bg-white shadow-md rounded-2xl border border-gray-100">
+                <table className="min-w-full divide-y divide-gray-200 text-sm">
                     <thead className="bg-indigo-600 text-white">
                         <tr>
-                            <th className="px-6 py-3 text-left text-sm font-semibold">
-                                User
-                            </th>
-                            <th className="px-6 py-3 text-left text-sm font-semibold">
-                                Items
-                            </th>
-                            <th className="px-6 py-3 text-left text-sm font-semibold">
-                                Total
-                            </th>
-                            <th className="px-6 py-3 text-left text-sm font-semibold">
-                                Status
-                            </th>
-                            <th className="px-6 py-3 text-left text-sm font-semibold">
-                                Actions
-                            </th>
+                            <th className="px-6 py-3 text-left font-semibold whitespace-nowrap">User</th>
+                            <th className="px-6 py-3 text-left font-semibold whitespace-nowrap">Items</th>
+                            <th className="px-6 py-3 text-left font-semibold whitespace-nowrap">Total</th>
+                            <th className="px-6 py-3 text-left font-semibold whitespace-nowrap">Status</th>
+                            <th className="px-6 py-3 text-left font-semibold whitespace-nowrap">Actions</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                         {orders.map((order) => (
                             <tr key={order._id} className="hover:bg-gray-50">
-                                <td className="px-6 py-4 text-sm">{order.user.name}</td>
-                                <td className="px-6 py-4 text-sm">
-                                    {order.orderItems.map((i) => (
-                                        <div key={i.product._id}>
-                                            <b>{i.product}</b> x <b>{i.quantity}</b>
+                                <td className="px-6 py-4 whitespace-nowrap">{order.user.name}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                    {order.orderItems.map((i, idx) => (
+                                        <div key={idx}>
+                                            <b>{i.product}</b> × <b>{i.quantity}</b>
                                         </div>
                                     ))}
                                 </td>
-                                <td className="px-6 py-4 text-sm font-semibold">
+                                <td className="px-6 py-4 font-semibold whitespace-nowrap">
                                     Rs. {order.totalAmount.toFixed(2)}
                                 </td>
-                                <td className="px-6 py-4 text-sm">
+                                <td className="px-6 py-4 whitespace-nowrap">
                                     <span
                                         className={`px-2 py-1 rounded-full text-white ${order.status === "pending"
                                                 ? "bg-yellow-500"
                                                 : "bg-green-600"
                                             }`}
                                     >
-                                        {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                                        {order.status.charAt(0).toUpperCase() +
+                                            order.status.slice(1)}
                                     </span>
                                 </td>
-                                <td className="px-6 py-4 text-sm space-x-2">
+                                <td className="px-6 py-4 space-x-2 whitespace-nowrap">
                                     {order.status === "pending" ? (
                                         <button
                                             onClick={() => updateStatus(order._id, "completed")}
