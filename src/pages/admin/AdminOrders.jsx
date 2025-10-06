@@ -50,58 +50,56 @@ export default function AdminOrders() {
 
     return (
         <div className="pt-24 min-h-screen px-4 md:px-8 lg:px-16 bg-gray-50">
-            <h2 className="text-2xl font-bold text-indigo-700 mb-6">
-                All Orders 🧾
-            </h2>
+            <h2 className="text-2xl font-bold text-indigo-700 mb-6">All Orders 🧾</h2>
 
-            <div className="overflow-x-auto bg-white shadow-md rounded-2xl border border-gray-100">
+            {/* ✅ Desktop Table */}
+            <div className="hidden md:block overflow-x-auto bg-white shadow-md rounded-2xl border border-gray-100">
                 <table className="min-w-full divide-y divide-gray-200 text-sm">
                     <thead className="bg-indigo-600 text-white">
                         <tr>
-                            <th className="px-6 py-3 text-left font-semibold whitespace-nowrap">User</th>
-                            <th className="px-6 py-3 text-left font-semibold whitespace-nowrap">Items</th>
-                            <th className="px-6 py-3 text-left font-semibold whitespace-nowrap">Total</th>
-                            <th className="px-6 py-3 text-left font-semibold whitespace-nowrap">Status</th>
-                            <th className="px-6 py-3 text-left font-semibold whitespace-nowrap">Actions</th>
+                            <th className="px-6 py-3 text-left font-semibold">User</th>
+                            <th className="px-6 py-3 text-left font-semibold">Items</th>
+                            <th className="px-6 py-3 text-left font-semibold">Total</th>
+                            <th className="px-6 py-3 text-left font-semibold">Status</th>
+                            <th className="px-6 py-3 text-left font-semibold">Actions</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                         {orders.map((order) => (
                             <tr key={order._id} className="hover:bg-gray-50">
-                                <td className="px-6 py-4 whitespace-nowrap">{order.user.name}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">
+                                <td className="px-6 py-4">{order.user.name}</td>
+                                <td className="px-6 py-4">
                                     {order.orderItems.map((i, idx) => (
                                         <div key={idx}>
-                                            <b>{i.product}</b> × <b>{i.quantity}</b>
+                                            {i.product} × {i.quantity}
                                         </div>
                                     ))}
                                 </td>
-                                <td className="px-6 py-4 font-semibold whitespace-nowrap">
+                                <td className="px-6 py-4 font-semibold">
                                     Rs. {order.totalAmount.toFixed(2)}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
+                                <td className="px-6 py-4">
                                     <span
                                         className={`px-2 py-1 rounded-full text-white ${order.status === "pending"
                                                 ? "bg-yellow-500"
                                                 : "bg-green-600"
                                             }`}
                                     >
-                                        {order.status.charAt(0).toUpperCase() +
-                                            order.status.slice(1)}
+                                        {order.status}
                                     </span>
                                 </td>
-                                <td className="px-6 py-4 space-x-2 whitespace-nowrap">
+                                <td className="px-6 py-4">
                                     {order.status === "pending" ? (
                                         <button
                                             onClick={() => updateStatus(order._id, "completed")}
-                                            className="bg-green-600 text-white px-3 py-1 rounded-full hover:bg-green-700 transition cursor-pointer"
+                                            className="bg-green-600 text-white px-3 py-1 rounded-full hover:bg-green-700"
                                         >
                                             Complete
                                         </button>
                                     ) : (
                                         <button
                                             onClick={() => updateStatus(order._id, "pending")}
-                                            className="bg-yellow-500 text-white px-3 py-1 rounded-full hover:bg-yellow-600 transition cursor-pointer"
+                                            className="bg-yellow-500 text-white px-3 py-1 rounded-full hover:bg-yellow-600"
                                         >
                                             Set Pending
                                         </button>
@@ -111,6 +109,55 @@ export default function AdminOrders() {
                         ))}
                     </tbody>
                 </table>
+            </div>
+
+            {/* ✅ Mobile Cards */}
+            <div className="md:hidden space-y-4">
+                {orders.map((order) => (
+                    <div
+                        key={order._id}
+                        className="bg-white shadow-md rounded-2xl p-4 border border-gray-100"
+                    >
+                        <p className="font-semibold text-indigo-700">
+                            👤 {order.user.name}
+                        </p>
+                        <p className="text-gray-600 text-sm mb-2">
+                            Rs. {order.totalAmount.toFixed(2)}
+                        </p>
+                        <div className="mb-2">
+                            {order.orderItems.map((i, idx) => (
+                                <div key={idx} className="text-sm text-gray-700">
+                                    {i.product} × {i.quantity}
+                                </div>
+                            ))}
+                        </div>
+                        <span
+                            className={`inline-block px-3 py-1 text-sm rounded-full text-white ${order.status === "pending"
+                                    ? "bg-yellow-500"
+                                    : "bg-green-600"
+                                }`}
+                        >
+                            {order.status}
+                        </span>
+                        <div className="mt-3">
+                            {order.status === "pending" ? (
+                                <button
+                                    onClick={() => updateStatus(order._id, "completed")}
+                                    className="bg-green-600 text-white px-3 py-1 rounded-full hover:bg-green-700 w-full mt-2"
+                                >
+                                    Mark Completed
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => updateStatus(order._id, "pending")}
+                                    className="bg-yellow-500 text-white px-3 py-1 rounded-full hover:bg-yellow-600 w-full mt-2"
+                                >
+                                    Set Pending
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                ))}
             </div>
         </div>
     );

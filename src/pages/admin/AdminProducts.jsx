@@ -150,68 +150,56 @@ export default function AdminProducts() {
                 </form>
             </div>
 
-            {/* ===== TABLE ===== */}
-            <div className="bg-white shadow-md rounded-2xl p-4 overflow-x-auto">
-                {loading ? (
-                    <p className="text-indigo-600 font-semibold text-center">Loading products...</p>
-                ) : products.length === 0 ? (
-                    <p className="text-gray-600 text-center">No products found.</p>
-                ) : (
-                    <table className="min-w-full text-sm">
-                        <thead>
-                            <tr className="text-left border-b border-gray-300">
-                                <th className="py-2 px-3">Image</th>
-                                <th className="py-2 px-3">Name</th>
-                                <th className="py-2 px-3 hidden md:table-cell">ID</th>
-                                <th className="py-2 px-3">Description</th>
-                                <th className="py-2 px-3">Price</th>
-                                <th className="py-2 px-3">Category</th>
-                                <th className="py-2 px-3 text-center">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {products.map((p) => (
-                                <tr key={p._id} className="border-b border-gray-200 hover:bg-gray-50">
-                                    <td className="py-2 px-3">
-                                        {p.image ? (
-                                            <img
-                                                src={p.image}
-                                                alt={p.name}
-                                                className="w-16 h-16 object-cover rounded-md"
-                                            />
-                                        ) : (
-                                            "No Image"
-                                        )}
-                                    </td>
-                                    <td className="py-2 px-3 font-medium">{p.name}</td>
-                                    <td className="py-2 px-3 hidden md:table-cell text-gray-500">
-                                        {p._id}
-                                    </td>
-                                    <td className="py-2 px-3 text-gray-600">
-                                        {p.description?.slice(0, 40)}...
-                                    </td>
-                                    <td className="py-2 px-3 font-semibold">Rs. {p.price}</td>
-                                    <td className="py-2 px-3">{p.category || "-"}</td>
-                                    <td className="py-2 px-3 flex gap-3 justify-center">
-                                        <button
-                                            onClick={() => handleEdit(p)}
-                                            className="text-blue-600 hover:underline flex items-center gap-1 cursor-pointer"
-                                        >
-                                            <Edit size={16} /> Edit
-                                        </button>
-                                        <button
-                                            onClick={() => handleDelete(p._id)}
-                                            className="text-red-600 hover:underline flex items-center gap-1 cursor-pointer"
-                                        >
-                                            <Trash2 size={16} /> Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                )}
-            </div>
+            {/* ===== RESPONSIVE PRODUCT LIST ===== */}
+            {loading ? (
+                <p className="text-indigo-600 font-semibold text-center">Loading products...</p>
+            ) : products.length === 0 ? (
+                <p className="text-gray-600 text-center">No products found.</p>
+            ) : (
+                <div className="grid gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    {products.map((p) => (
+                        <div
+                            key={p._id}
+                            className="bg-white rounded-2xl shadow-sm p-4 flex flex-col justify-between"
+                        >
+                            <div>
+                                <img
+                                    src={p.image}
+                                    alt={p.name}
+                                    className="w-full h-40 object-cover rounded-xl mb-3"
+                                />
+                                <h3 className="text-lg font-semibold text-gray-800">
+                                    {p.name}
+                                </h3>
+                                <p className="text-gray-600 text-sm mb-2">
+                                    {p.description?.slice(0, 60)}...
+                                </p>
+                                <p className="font-semibold text-indigo-700">
+                                    Rs. {p.price}
+                                </p>
+                                <p className="text-sm text-gray-500">
+                                    Category: {p.category || "-"}
+                                </p>
+                            </div>
+
+                            <div className="flex justify-between mt-4">
+                                <button
+                                    onClick={() => handleEdit(p)}
+                                    className="text-blue-600 hover:underline flex items-center gap-1 cursor-pointer"
+                                >
+                                    <Edit size={16} /> Edit
+                                </button>
+                                <button
+                                    onClick={() => handleDelete(p._id)}
+                                    className="text-red-600 hover:underline flex items-center gap-1 cursor-pointer"
+                                >
+                                    <Trash2 size={16} /> Delete
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 }
