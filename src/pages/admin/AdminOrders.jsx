@@ -118,7 +118,7 @@ export default function AdminOrders() {
                         key={order._id}
                         className="bg-white shadow-md rounded-2xl p-4 border border-gray-100"
                     >
-                        <p className="font-semibold text-indigo-700 font-semibold">
+                        <p className="font-semibold text-indigo-700">
                             👤 {order.user.name}
                         </p>
                         <p className="text-gray-600 text-sm mb-2 font-semibold">
