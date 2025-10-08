@@ -67,11 +67,11 @@ export default function AdminOrders() {
                     <tbody className="divide-y divide-gray-200">
                         {orders.map((order) => (
                             <tr key={order._id} className="hover:bg-gray-50">
-                                <td className="px-6 py-4">{order.user.name}</td>
+                                <td className="px-6 py-4 font-semibold">{order.user.name}</td>
                                 <td className="px-6 py-4">
                                     {order.orderItems.map((i, idx) => (
                                         <div key={idx}>
-                                            {i.product} × {i.quantity}
+                                            <b>{i.product}</b> x <b>{i.quantity}</b>
                                         </div>
                                     ))}
                                 </td>
@@ -80,21 +80,21 @@ export default function AdminOrders() {
                                 </td>
                                 <td className="px-6 py-4">
                                     <span
-                                        className={`px-2 py-1 rounded-full text-white ${order.status === "pending"
-                                                ? "bg-yellow-500"
-                                                : "bg-green-600"
+                                        className={`px-2 py-1 rounded-md text-white ${order.status === "pending"
+                                            ? "bg-yellow-500"
+                                            : "bg-green-600"
                                             }`}
                                     >
-                                        {order.status}
+                                        {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                                     </span>
                                 </td>
                                 <td className="px-6 py-4">
                                     {order.status === "pending" ? (
                                         <button
                                             onClick={() => updateStatus(order._id, "completed")}
-                                            className="bg-green-600 text-white px-3 py-1 rounded-full hover:bg-green-700"
+                                            className="bg-green-600 text-white px-3 py-1 rounded-full hover:bg-green-700 cursor-pointer"
                                         >
-                                            Complete
+                                            Mark Completed
                                         </button>
                                     ) : (
                                         <button
@@ -118,32 +118,33 @@ export default function AdminOrders() {
                         key={order._id}
                         className="bg-white shadow-md rounded-2xl p-4 border border-gray-100"
                     >
-                        <p className="font-semibold text-indigo-700">
+                        <p className="font-semibold text-indigo-700 font-semibold">
                             👤 {order.user.name}
                         </p>
-                        <p className="text-gray-600 text-sm mb-2">
+                        <p className="text-gray-600 text-sm mb-2 font-semibold">
                             Rs. {order.totalAmount.toFixed(2)}
                         </p>
                         <div className="mb-2">
                             {order.orderItems.map((i, idx) => (
                                 <div key={idx} className="text-sm text-gray-700">
-                                    {i.product} × {i.quantity}
+                                    <b>{i.product}</b> x <b>{i.quantity}</b>
+
                                 </div>
                             ))}
                         </div>
                         <span
-                            className={`inline-block px-3 py-1 text-sm rounded-full text-white ${order.status === "pending"
-                                    ? "bg-yellow-500"
-                                    : "bg-green-600"
+                            className={`inline-block px-3 py-1 text-sm rounded-md text-white ${order.status === "pending"
+                                ? "bg-yellow-500"
+                                : "bg-green-600"
                                 }`}
                         >
-                            {order.status}
+                            {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                         </span>
                         <div className="mt-3">
                             {order.status === "pending" ? (
                                 <button
                                     onClick={() => updateStatus(order._id, "completed")}
-                                    className="bg-green-600 text-white px-3 py-1 rounded-full hover:bg-green-700 w-full mt-2"
+                                    className="bg-green-600 text-white px-3 py-1 rounded-full hover:bg-green-700 w-full mt-2 cursor-pointer"
                                 >
                                     Mark Completed
                                 </button>
