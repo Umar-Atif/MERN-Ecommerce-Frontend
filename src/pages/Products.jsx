@@ -10,7 +10,7 @@ export default function Products() {
     const fetchProducts = async () => {
       try {
         const res = await api.get(`/products`);
-        setProducts(res.data);
+        setProducts(res.data.filter(p => p.stock));
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {

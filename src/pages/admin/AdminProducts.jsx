@@ -90,6 +90,24 @@ export default function AdminProducts() {
         setEditingProductId(product._id);
     };
 
+    const handleStockToggle = async (id) => {
+        try {
+            const res = await api.put(`/products/stock/${id}`, {}, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+            fetchProducts();
+            toast.success(
+                `Product is now ${res.data.stock ? "in stock" : "out of stock"}`
+            );
+        } catch (error) {
+            console.error("Error toggling stock:", error);
+            toast.error("Failed to update stock");
+        }
+    };
+
+
     return (
         <div className="pt-24 min-h-screen px-4 md:px-8 lg:px-16 bg-gray-50">
             <h2 className="text-2xl font-bold text-indigo-700 mb-6 text-center md:text-left">
@@ -182,7 +200,7 @@ export default function AdminProducts() {
                                 </p>
                             </div>
 
-                            <div className="flex justify-between mt-4">
+                            <div className="flex justify-between mt-4 items-center">
                                 <button
                                     onClick={() => handleEdit(p)}
                                     className="text-blue-600 hover:underline flex items-center gap-1 cursor-pointer"
@@ -195,7 +213,21 @@ export default function AdminProducts() {
                                 >
                                     <Trash2 size={16} /> Delete
                                 </button>
+
+                                {/* Toggle Button */}
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                    <span className="text-sm font-medium text-gray-600">
+                                        {p.stock ? "In Stock" : "Out of Stock"}
+                                    </span>
+                                    <input
+                                        type="checkbox"
+                                        checked={p.stock}
+                                        onChange={() => handleStockToggle(p._id)}
+                                        className="toggle-checkbox"
+                                    />
+                                </label>
                             </div>
+
                         </div>
                     ))}
                 </div>
